@@ -1,0 +1,28 @@
+name: Daily Auto Commit
+
+on:
+  schedule:
+    - cron: '30 4 * * *'  # Runs daily at 10:00 AM IST
+  workflow_dispatch:       # Allows manual trigger
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.PAT }}  # Using the PAT you created
+    
+    - name: Make changes
+      run: |
+        echo "Auto-commit on $(date)" >> auto-log.txt
+    
+    - name: Commit and push
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Automated daily commit: $(date '+%Y-%m-%d %H:%M')" || echo "No changes to commit"
+        git push https://${{ secrets.PAT }}@github.com/${{ github.repository }}.git
