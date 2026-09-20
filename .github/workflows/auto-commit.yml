@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.PAT }}  # Using the PAT you created
+        token: ${{ secrets.GH_PAT }}  # Using the PAT you created
     
     - name: Make changes
       run: |
